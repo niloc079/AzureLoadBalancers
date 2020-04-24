@@ -27,10 +27,10 @@ $SubID = "[AzSubID]" #Azure Subscription ID
 #Tags
 $TagCreatedBy = "[AzTagEmail]"             #Email or name
 $TagCreatedDate = "[AzTagCreatedDate]"     #Created date, update format as needed
-$TagNS_Application = "[AzTagApp]"          #Azure Application, exmp: ADFS, SAP
-$TagNS_Environment = "[AzTagEnv]"          #Azure Environment, exmp: PRD, QA, TEST, DEV
-$TagNS_Function = "[AzTagFunction]"  #Function/Type, exmp: LB - Load Balancer, SQL - SQL Server
-$TagNS_Location = "[AzTagLoc]"   #Azure Location, exmp: USCE - Central US, use if [AzLoc] isn't in the correct format
+$TagApplication = "[AzTagApp]"          #Azure Application, exmp: ADFS, SAP
+$TagEnvironment = "[AzTagEnv]"          #Azure Environment, exmp: PRD, QA, TEST, DEV
+$TagFunction = "[AzTagFunction]"  #Function/Type, exmp: LB - Load Balancer, SQL - SQL Server
+$TagLocation = "[AzTagLoc]"   #Azure Location, exmp: USCE - Central US, use if [AzLoc] isn't in the correct format
 $TagObjectSKU = "[AzTagSku]"              #Azure SKU, exmp: Free, Standard, Premium
 
 #AzNetwork
@@ -125,10 +125,10 @@ $resource = Get-AzResource -ResourceName $AzAlbName -ResourceGroupName $AzAlbRg
 Set-AzResource -Tag @{ 
 "CreatedBy"=$TagCreatedBy; 
 "CreatedDate"=$TagCreatedDate; 
-"NS_Application"=$TagNS_Application; 
-"NS_Environment"=$TagNS_Environment; 
-"NS_Function"=$TagNS_Function; 
-"NS_Location"=$TagNS_Location; 
+"Application"=$TagNS_Application; 
+"Environment"=$TagNS_Environment; 
+"Function"=$TagNS_Function; 
+"Location"=$TagNS_Location; 
 "ObjectSKU"=$TagObjectSKU; 
 } -ResourceId $resource.ResourceId -Force
 
