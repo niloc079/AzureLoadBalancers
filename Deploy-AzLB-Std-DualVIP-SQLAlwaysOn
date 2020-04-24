@@ -125,10 +125,10 @@ $resource = Get-AzResource -ResourceName $AzAlbName -ResourceGroupName $AzAlbRg
 Set-AzResource -Tag @{ 
 "CreatedBy"=$TagCreatedBy; 
 "CreatedDate"=$TagCreatedDate; 
-"Application"=$TagNS_Application; 
-"Environment"=$TagNS_Environment; 
-"Function"=$TagNS_Function; 
-"Location"=$TagNS_Location; 
+"Application"=$TagApplication; 
+"Environment"=$TagEnvironment; 
+"Function"=$TagFunction; 
+"Location"=$TagLocation; 
 "ObjectSKU"=$TagObjectSKU; 
 } -ResourceId $resource.ResourceId -Force
 
