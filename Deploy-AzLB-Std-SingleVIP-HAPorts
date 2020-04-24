@@ -1,24 +1,21 @@
 ##
 ## Last Updated: 2020-04-24
 ## Purpose: Deploy Single Azure Load Balancer Standard
-## 
+## Source: https://github.com/niloc079/AzureLoadBalancers/blob/master/Deploy-AzLB-Std-SingleVIP-HAPorts
 ## Created by: TBD
 ## Created by Email: TBD
 ## Organization: TBD
 ## Environment: TBD
 ## Application: TBD
 ##
-## Links: https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-get-started-ilb-arm-ps
-## Links: https://github.com/Huachao/azure-content/blob/master/articles/load-balancer/load-balancer-internal-arm-powershell.md
-## Links: https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/load-balancer/load-balancer-multiple-ip-powershell.md
-## Links: https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-distribution-mode
-##
-## END
+## Technical Reference: https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-get-started-ilb-arm-ps
+## Technical Reference: https://github.com/Huachao/azure-content/blob/master/articles/load-balancer/load-balancer-internal-arm-powershell.md
+## Technical Reference: https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/load-balancer/load-balancer-multiple-ip-powershell.md
+## Technical Reference: https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-distribution-mode
 ##
 ## Usage;
 ## Replace all values within brackets [] with value data from environment
 ##
-
 #
 #Variables [START]
 #
@@ -28,16 +25,16 @@ $AzLoc = "[AzLocation]" #Azure Location Name
 $SubID = "[AzSubID]" #Azure Subscription ID
 
 #Tags
-$TagCreatedBy = "[AzEmail]"             #Email or name
-$TagCreatedDate = "[AzCreatedDate]"     #Created date, update format as needed
-$TagNS_Application = "[AzApp]"          #Azure Application, exmp: ADFS, SAP
-$TagNS_Environment = "[AzEnv]"          #Azure Environment, exmp: PRD, QA, TEST, DEV
-$TagNS_Function = "LB - Load Balancer"  #Function/Type, exmp: LB - Load Balancer, SQL - SQL Server
-$TagNS_Location = "USCE - Central US"   #Azure Location, exmp: USCE - Central US, use if [AzLoc] isn't in the correct format
-$TagObjectSKU = "Standard"              #Azure SKU, exmp: Free, Standard, Premium
+$TagCreatedBy = "[AzTagEmail]"             #Email or name
+$TagCreatedDate = "[AzTagCreatedDate]"     #Created date, update format as needed
+$TagNS_Application = "[AzTagApp]"          #Azure Application, exmp: ADFS, SAP
+$TagNS_Environment = "[AzTagEnv]"          #Azure Environment, exmp: PRD, QA, TEST, DEV
+$TagNS_Function = "[AzTagFunction]"  #Function/Type, exmp: LB - Load Balancer, SQL - SQL Server
+$TagNS_Location = "[AzTagLoc]"   #Azure Location, exmp: USCE - Central US, use if [AzLoc] isn't in the correct format
+$TagObjectSKU = "[AzTagSku]"              #Azure SKU, exmp: Free, Standard, Premium
 
 #AzNetwork
-$AzVnetRg = "prduscenetrg"              #Azure Virtual Network Resource Group (Not the AzLB)
+$AzVnetRg = "[AzLbVnetRg]"              #Azure Virtual Network Resource Group (Not the AzLB)
 $AzVnet = "[AzLbVnet]"                  #Azure Virtual Network for Azure Load Balancer, must be same VNET, usually same AzSubnet
 $AzSubnet = "[AzLbSubnet]"              #Azure Subnet (inside above VNET) for Azure Load Balancer
 
@@ -52,7 +49,7 @@ $AzAlbBe1Prtcl = "All"                  #Azure Load Balancer HA Ports enabled, l
 $AzAlbFe1Prt = "0"                      #Azure Load Balancer HA port configration, do not change with HA enabled
 $AzAlbBe1Prt = "0"                      #Azure Load Balancer HA port configration, do not change with HA enabled
 $AzAlbIp = "[0.0.0.0]"                  #Azure Load Balancer Frontend IP
-$AzAlbHp1Prt = "80"                     #Azure Load Balancer Healthprobe Port
+$AzAlbHp1Prt = "80"                     #Azure Load Balancer Healthprobe Port, update to application listener, exmp. 80 or 443 or 8080
 $AzAlbHp1Prtcl = "http"                 #Azure Load Balancer Healthprobe Type
 $AzAlbHp1Pth = "/"                      #Azure Load Balancer Healthprobe URL/URI Call, must get 200 at this address
 
@@ -62,19 +59,17 @@ $AzVM1 = "[AzVmName1]"                  #Azure VM 1 Name for backend pool
 $AzVMNic1 = "[AzVmNicName1]"            #Azure VM 1 NIC name for backend pool
 $AzVM2 = "[AzVmName2]"                  #Azure VM 2 Name for backend pool
 $AzVMNic2 = "[AzVmNicName2]"            #Azure VM 1 NIC name for backend pool
-
-#Login and Connect
-#Clear-AzContext                         #Clears logins
-Connect-AzAccount
-Get-AzSubscription
-Select-AzSubscription -Subscriptionid $SubID
-
 #
 # Variables [END]
 #
 #
 # Script [Start]
 #
+#Login and Connect
+#Clear-AzContext                         #Clears logins
+Connect-AzAccount
+Get-AzSubscription
+Select-AzSubscription -Subscriptionid $SubID
 
 #Create new AzRg
 New-AzResourceGroup -Name $AzAlbRg -location $AzLoc
